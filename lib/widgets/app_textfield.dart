@@ -39,6 +39,9 @@ class AppTextField extends StatelessWidget {
         fontSize: 22,
       ),
       decoration: InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16)
+          ),
           labelText: labelText,
           labelStyle: TextStyle(fontSize: 22),
           hintText: hintText,

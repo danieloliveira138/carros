@@ -1,3 +1,6 @@
+import 'package:carros/api/login_api.dart';
+import 'package:carros/pages/home_page.dart';
+import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/app_button.dart';
 import 'package:carros/widgets/app_textfield.dart';
 import 'package:flutter/material.dart';
@@ -68,14 +71,23 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _onClickLogin() {
+  _onClickLogin() async {
     bool formOk = _formKey.currentState.validate();
     if (!formOk) {
       return;
     }
 
+    String login = _loginController.text;
+    String passwd = _passwdController.text;
     print(
         'Login: ${_loginController.text}\nPassword: ${_passwdController.text}');
+
+    bool validator = await LoginApi.login(login, passwd);
+
+    if(validator) {
+      nav(context, Home(_loginController.text));
+    }
+
   }
 
   String _validateLogin(String value) {
