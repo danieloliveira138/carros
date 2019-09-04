@@ -1,4 +1,5 @@
 import 'package:carros/api/login_api.dart';
+import 'package:carros/models/user.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/app_button.dart';
@@ -82,10 +83,10 @@ class _LoginPageState extends State<LoginPage> {
     print(
         'Login: ${_loginController.text}\nPassword: ${_passwdController.text}');
 
-    bool validator = await LoginApi.login(login, passwd);
+    User user = await LoginApi.login(login, passwd);
 
-    if(validator) {
-      nav(context, Home(_loginController.text));
+    if(user != null) {
+      nav(context, Home(user));
     }
 
   }
@@ -101,8 +102,8 @@ class _LoginPageState extends State<LoginPage> {
     if (value.isEmpty) {
       return 'Digite sua senha';
     }
-    if (value.length <= 3) {
-      return 'A senha precisa ter no mínimo 4 letras ou números';
+    if (value.length <= 2) {
+      return 'A senha precisa ter no mínimo 3 letras ou números';
     }
     return null;
   }

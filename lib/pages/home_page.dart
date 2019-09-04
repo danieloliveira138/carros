@@ -1,11 +1,12 @@
+import 'package:carros/models/user.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
 
-  String _userName;
+  User user;
 
 
-  Home(this._userName);
+  Home(this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,10 @@ class Home extends StatelessWidget {
   _body() {
     return Center(
       child: Text(
-        _userName,
+        '''
+        Nome: ${user?.nome}
+        email: ${user?.email}
+        ''',
       ),
     );
   }
