@@ -5,3 +5,7 @@ nav(context, Widget page) {
     return page;
   }));
 }
+
+pop(context) {
+  Navigator.pop(context);
+}

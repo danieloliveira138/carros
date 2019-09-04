@@ -13,7 +13,9 @@ class User {
         nome = map['nome'],
         email = map['email'],
         urlFoto = map['urlFoto'],
-        token = map['token'];
+        token = map['token'],
+        roles = map['roles'] != null ?
+            map['roles'].map<String>((role) => role.toString()).toList() : null;
 
   User(
     this.id,
@@ -30,4 +32,5 @@ class User {
     return 'Usuario{id: $id, login: $login, nome: $nome, email: $email, '
         'urlFoto: $urlFoto, token: $token, roles: $roles}';
   }
+
 }

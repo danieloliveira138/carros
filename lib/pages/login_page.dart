@@ -1,7 +1,9 @@
 import 'package:carros/api/login_api.dart';
+import 'package:carros/models/api_response.dart';
 import 'package:carros/models/user.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/utils/nav.dart';
+import 'package:carros/widgets/alert_dialog.dart';
 import 'package:carros/widgets/app_button.dart';
 import 'package:carros/widgets/app_textfield.dart';
 import 'package:flutter/material.dart';
@@ -83,11 +85,19 @@ class _LoginPageState extends State<LoginPage> {
     print(
         'Login: ${_loginController.text}\nPassword: ${_passwdController.text}');
 
-    User user = await LoginApi.login(login, passwd);
+    ApiResponse response = await LoginApi.login(login, passwd);
 
-    if(user != null) {
-      nav(context, Home(user));
+    if(response.status) {
+
+      nav(context, Home(response.result));
+
+      return;
+
     }
+
+    alertDialog(context, "Erro", response.msg, ok: () => pop(context));
+
+    return;
 
   }
 
