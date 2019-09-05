@@ -18,17 +18,13 @@ class _HomeState extends State<Home> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: _appbar(),
+        appBar: AppBar(
+          title: Text('Carros'),
+          bottom: TabBar(tabs: _getTabs()),
+        ),
         body: _body(),
         drawer: MenuList(),
       ),
-    );
-  }
-
-  _appbar() {
-    return AppBar(
-      title: Text('Carros'),
-      bottom: TabBar(tabs: _getTabs()),
     );
   }
 

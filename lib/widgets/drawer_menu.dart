@@ -46,9 +46,6 @@ class MenuList extends StatelessWidget {
             trailing: Icon(Icons.arrow_forward),
             onTap: () => _onClickLogout(context),
           ),
-          Center(
-            child: Text("Hello word")
-          )
         ],
       ),
     );
