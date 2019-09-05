@@ -1,9 +1,19 @@
+import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 
-alertDialog(BuildContext context, String title, String message, {Function cancel, Function ok}) {
+alertDialog(BuildContext context, String title, String message, {Function cancel,
+  Function ok, bool dismissible = true}) {
 
-  Widget _okButton, _cancelButton;
-  ListView<Widget> _buttons = [] as ListView;
+  List<FlatButton> _buttons = [];
+
+  if(cancel != null) {
+    _buttons.add(
+        FlatButton(
+            child: Text('Cancelar'),
+            onPressed: cancel
+        )
+    );
+  }
 
   if(ok != null) {
     _buttons.add(
@@ -14,25 +24,14 @@ alertDialog(BuildContext context, String title, String message, {Function cancel
     );
   }
 
-  if (cancel != null) {
-    _buttons.add(
-        FlatButton(
-            onPressed: cancel,
-            child: Text('Cancelar')
-        )
-    );
-  }
-
   showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: dismissible,
       builder: (context) {
         return AlertDialog(
           title: Text(title),
           content: Text(message),
-          actions: ListView<Widget> = [
-
-          ]
+          actions: _buttons,
         );
       }
   );

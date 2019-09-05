@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'Carros',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        brightness: Brightness.dark,
+
       ),
       home: LoginPage(),
     );
