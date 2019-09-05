@@ -26,8 +26,10 @@ class Home extends StatelessWidget {
     return Center(
       child: Text(
         '''
+        
         Nome: ${user?.nome}
         email: ${user?.email}
+        
         ''',
       ),
     );

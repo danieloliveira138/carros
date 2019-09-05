@@ -1,4 +1,3 @@
-import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 
 alertDialog(BuildContext context, String title, String message, {Function cancel,
@@ -29,6 +28,7 @@ alertDialog(BuildContext context, String title, String message, {Function cancel
       barrierDismissible: dismissible,
       builder: (context) {
         return AlertDialog(
+          elevation: 8,
           title: Text(title),
           content: Text(message),
           actions: _buttons,
