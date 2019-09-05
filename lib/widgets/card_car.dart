@@ -25,7 +25,7 @@ class CardCar extends StatelessWidget {
               children: <Widget>[
                 Center(
                   child: Image.network(
-                    car.urlFoto,
+                    car.urlFoto ?? "Image not find",
                     width: 200,
                   ),
                 ),
@@ -48,7 +48,7 @@ class CardCar extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.only(left: 8, right: 8),
                   child: Text(
-                    'Descriçãos...',
+                    'Categoria: ${car.tipo}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.black,
@@ -71,5 +71,4 @@ class CardCar extends StatelessWidget {
   double _lastChildMargin(int length, int index) {
     return (length == (index + 1)) ? 8 : 0;
   }
-
 }
