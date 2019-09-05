@@ -18,6 +18,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final _passwdController = TextEditingController();
 
+  bool _showProgress = false;
+
   var _formKey = GlobalKey<FormState>();
 
   final _focusPasswd = FocusNode();
@@ -67,7 +69,11 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 24,
             ),
-            AppButton('Login', _onClickLogin),
+            AppButton(
+              'Login',
+              _onClickLogin,
+              showProgress: _showProgress,
+            ),
           ],
         ),
       ),
@@ -82,8 +88,8 @@ class _LoginPageState extends State<LoginPage> {
 
     String login = _loginController.text;
     String passwd = _passwdController.text;
-    print(
-        'Login: ${_loginController.text}\nPassword: ${_passwdController.text}');
+
+    _onProgress(true);
 
     ApiResponse response = await LoginApi.login(login, passwd);
 
@@ -91,14 +97,24 @@ class _LoginPageState extends State<LoginPage> {
 
       nav(context, Home(response.result));
 
+      _onProgress(false);
+
       return;
 
     }
 
     alertDialog(context, "Erro", response.msg, ok: () => pop(context));
 
+    _onProgress(false);
+
     return;
 
+  }
+
+  _onProgress(enable) {
+    setState(() {
+      _showProgress = enable;
+    });
   }
 
   String _validateLogin(String value) {
