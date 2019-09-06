@@ -3,6 +3,7 @@ import 'package:carros/models/car.dart';
 import 'package:carros/widgets/card_car.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CarsListView extends StatefulWidget {
 
   String _type;

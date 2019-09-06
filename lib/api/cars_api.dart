@@ -4,13 +4,13 @@ import 'package:http/http.dart' as http;
 
 class CarsApi {
 
-  static final String baseUrl = 'https://carros-springboot.herokuapp.com/api/v1/carros';
+  static const String baseUrl = 'https://carros-springboot.herokuapp.com/api/v1/carros';
 
-  static final String CLASSICOS = '/tipo/classicos';
+  static const String CLASSICOS = '/tipo/classicos';
 
-  static final String LUXO = '/tipo/luxo';
+  static const String LUXO = '/tipo/luxo';
 
-  static final String ESPORTIVOS = '/tipo/esportivos';
+  static const String ESPORTIVOS = '/tipo/esportivos';
 
   static Future<List<Car>> getListCars({type}) async {
 

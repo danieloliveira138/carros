@@ -1,4 +1,5 @@
 import 'package:carros/models/user.dart';
+import 'package:carros/utils/shared_preferences.dart';
 import 'package:carros/widgets/cars_listview.dart';
 import 'package:carros/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
@@ -15,23 +16,36 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
 
+  TabController _tabController;
+
+  static const String TAB_INDEX = 'tab_index';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _initTabs();
+
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Carros'),
-          bottom: TabBar(tabs: _getTabs()),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Carros'),
+        bottom: TabBar(
+          tabs: _getTabs(),
+          controller: _tabController,
         ),
-        body: _body(),
-        drawer: MenuList(),
       ),
+      body: _body(),
+      drawer: MenuList(),
     );
   }
 
   _body() {
     return TabBarView(
+      controller: _tabController,
       children: <Widget>[
         CarsListView.classics(),
         CarsListView.sportive(),
@@ -46,6 +60,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
       Tab(text: "Esportivos",),
       Tab(text: "Luxo"),
     ];
+  }
+
+  _initTabs() async {
+
+    _tabController = TabController(length: 3, vsync: this);
+
+    _tabController.index = await SharedPrefs.getPrefInt(TAB_INDEX) ?? 0;
+
+    _tabController.addListener(() {
+
+      print("Tab: ${_tabController.index}");
+
+      SharedPrefs.setPrefInt(TAB_INDEX, _tabController.index);
+
+    });
   }
 
 }
