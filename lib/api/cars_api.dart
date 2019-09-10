@@ -13,7 +13,7 @@ class CarsApi {
 
   static const String ESPORTIVOS = '/tipo/esportivos';
 
-  static Future<List<Car>> getListCars({type}) async {
+  static getListCars({type}) async {
 
     User user = await User.loadUser();
 
@@ -30,9 +30,13 @@ class CarsApi {
 
       List mapResponse = json.decode(response.body);
 
+      print("Request $url");
+
       return mapResponse.map<Car>((map) => Car.fromJson(map)).toList();
 
-    } catch (error) {
+    } catch (error, exception) {
+
+      print("Deu pau: $exception");
 
       return error;
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carros/api/cars_api.dart';
 import 'package:carros/models/car.dart';
 import 'package:carros/pages/car_page.dart';
@@ -26,9 +28,20 @@ class CarsListView extends StatefulWidget {
 
   @override
   _CarsListViewState createState() => _CarsListViewState();
+
 }
 
 class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClientMixin<CarsListView>{
+
+  final _streamController = StreamController<List<Car>>();
+
+  @override
+  void initState() {
+
+    _loadCars();
+
+    super.initState();
+  }
 
   @override
   bool get wantKeepAlive => true;
@@ -37,29 +50,32 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
   Widget build(BuildContext context) {
     super.build(context);
 
-    Future<List<Car>> future = CarsApi.getListCars(type: widget._type);
-
-    return FutureBuilder(
-      future: future,
+    return StreamBuilder(
+      stream: _streamController.stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(
             child: Text(
-              'Erro ao acessar o servidor!!!',
+              'Erro ao Acessar o Servidor',
               style: TextStyle(
-                color: Colors.red,
-                fontSize: 28,
+                fontSize: 22,
+                color: Colors.red
               ),
             ),
           );
         }
-        return !snapshot.hasData
-            ? Center(
-          child: CircularProgressIndicator(),
-        )
-            : _getCardList(snapshot.data);
+
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        return _getCardList(snapshot.data);
+
       },
     );
+
   }
 
   _getCardList(data) {
@@ -91,6 +107,19 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
 
   _onClickDetails(Car car){
     nav(context, CarPage(car));
+  }
+
+  void _loadCars() async {
+
+    var cars = await CarsApi.getListCars(type: widget._type);
+
+    _streamController.add(cars);
+  }
+
+  @override
+  void dispose() {
+    _streamController.close();
+    super.dispose();
   }
 
 }
