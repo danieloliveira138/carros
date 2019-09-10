@@ -31,6 +31,8 @@ class LoginApi {
 
         print(user.toString());
 
+        user.save();
+
         return ApiResponse.success(user);
 
       }
