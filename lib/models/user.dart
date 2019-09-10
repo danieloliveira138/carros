@@ -47,21 +47,19 @@ class User {
 
   save() async {
     Map map = toJson();
-
     String json = converter.json.encode(map);
-
     SharedPrefs.setPrefString(USER_SAVED, json);
-
   }
 
-  Future<User> loadUser() async {
+  static clear() async {
+    return SharedPrefs.setPrefString(USER_SAVED, "");
+  }
+
+  static Future<User> loadUser() async {
     String json = await SharedPrefs.getPrefString(USER_SAVED);
-
     Map map = converter.json.decode(json);
-
-    return User.fromJson(map);
-
-
+    User user = User.fromJson(map);
+    return user;
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:carros/api/login_api.dart';
 import 'package:carros/models/api_response.dart';
+import 'package:carros/models/user.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/alert_dialog.dart';
@@ -25,6 +26,17 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    Future<User> future = User.loadUser();
+
+    future.then((User user){
+      setState(() {
+        if (user != null) {
+          print(user.toString());
+          _onAutoLogin();
+        }
+      });
+    });
+
     super.initState();
   }
 
@@ -94,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if(response.status) {
 
-      nav(context, Home(response.result), replace: true);
+      nav(context, Home(), replace: true);
 
       _onProgress(false);
 
@@ -107,6 +119,15 @@ class _LoginPageState extends State<LoginPage> {
     _onProgress(false);
 
     return;
+
+  }
+
+  _onAutoLogin() {
+    _onProgress(true);
+
+    nav(context, Home(), replace: true);
+
+    _onProgress(false);
 
   }
 

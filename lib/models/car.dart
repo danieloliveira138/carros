@@ -10,13 +10,13 @@ class Car {
 
   Car(
       {this.id,
-        this.nome,
-        this.tipo,
-        this.descricao,
-        this.urlFoto,
-        this.urlVideo,
-        this.latitude,
-        this.longitude});
+      this.nome,
+      this.tipo,
+      this.descricao,
+      this.urlFoto,
+      this.urlVideo,
+      this.latitude,
+      this.longitude});
 
   Car.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -40,5 +40,10 @@ class Car {
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'Car{id: $id, nome: $nome, tipo: $tipo, descricao: $descricao, urlFoto: $urlFoto, urlVideo: $urlVideo, latitude: $latitude, longitude: $longitude}';
   }
 }

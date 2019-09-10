@@ -1,5 +1,7 @@
 import 'package:carros/api/cars_api.dart';
 import 'package:carros/models/car.dart';
+import 'package:carros/pages/car_page.dart';
+import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/card_car.dart';
 import 'package:flutter/material.dart';
 
@@ -40,6 +42,17 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              'Erro ao acessar o servidor!!!',
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 28,
+              ),
+            ),
+          );
+        }
         return !snapshot.hasData
             ? Center(
           child: CircularProgressIndicator(),
@@ -63,7 +76,7 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
           actions: <Widget>[
             FlatButton(
               child: Text('Descrição'),
-              onPressed: () {},
+              onPressed: () => _onClickDetails(carros[index]),
             ),
             FlatButton(
               child: Text('Compartilhar'),
@@ -74,6 +87,10 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
       },
     );
 
+  }
+
+  _onClickDetails(Car car){
+    nav(context, CarPage(car));
   }
 
 }
