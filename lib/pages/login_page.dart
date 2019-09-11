@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carros/api/login_api.dart';
 import 'package:carros/models/api_response.dart';
 import 'package:carros/models/user.dart';
@@ -14,6 +16,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  StreamController _streamController = StreamController<bool>();
+
   final _loginController = TextEditingController();
 
   final _passwdController = TextEditingController();
@@ -80,10 +84,21 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 24,
             ),
-            AppButton(
-              'Login',
-              _onClickLogin,
-              showProgress: _showProgress,
+            StreamBuilder<bool>(
+              stream: _streamController.stream,
+              builder: (context, snapshot) {
+                bool showProgress = false;
+                if (snapshot.hasData) {
+                  showProgress = snapshot.data;
+                }
+
+                return AppButton(
+                  'Login',
+                  _onClickLogin,
+                  showProgress: showProgress,
+                );
+
+              },
             ),
           ],
         ),
@@ -100,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
     String login = _loginController.text;
     String passwd = _passwdController.text;
 
-    _onProgress(true);
+    _streamController.add(true);
 
     ApiResponse response = await LoginApi.login(login, passwd);
 
@@ -108,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
 
       nav(context, Home(), replace: true);
 
-      _onProgress(false);
+      _streamController.add(false);
 
       return;
 
@@ -116,25 +131,19 @@ class _LoginPageState extends State<LoginPage> {
 
     alertDialog(context, "Erro", response.msg, ok: () => pop(context));
 
-    _onProgress(false);
+    _streamController.add(false);
 
     return;
 
   }
 
   _onAutoLogin() {
-    _onProgress(true);
+    _streamController.add(true);
 
     nav(context, Home(), replace: true);
 
-    _onProgress(false);
+    _streamController.add(false);
 
-  }
-
-  _onProgress(enable) {
-    setState(() {
-      _showProgress = enable;
-    });
   }
 
   String _validateLogin(String value) {
@@ -156,6 +165,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    _streamController.close();
     super.dispose();
   }
 }
