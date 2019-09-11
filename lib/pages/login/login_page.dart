@@ -2,6 +2,7 @@ import 'package:carros/api/login_api.dart';
 import 'package:carros/models/api_response.dart';
 import 'package:carros/models/user.dart';
 import 'package:carros/pages/home_page.dart';
+import 'package:carros/pages/login/login_block.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/alert_dialog.dart';
 import 'package:carros/widgets/app_button.dart';
@@ -14,6 +15,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final bloc = LoginBlock();
+
+  final stream = bloc.stream;
+
   final _loginController = TextEditingController();
 
   final _passwdController = TextEditingController();
@@ -156,6 +161,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+
     super.dispose();
   }
 }
