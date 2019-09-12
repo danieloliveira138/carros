@@ -43,8 +43,10 @@ class LoginApi {
 
       print('Login Error: $error >>> $exeption');
 
-      return ApiResponse.error("Ops, não foi possível realizar o login.");
+      return ApiResponse.error('Error: $error');
 
     }
+
   }
+
 }

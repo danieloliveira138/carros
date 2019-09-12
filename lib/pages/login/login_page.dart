@@ -1,10 +1,5 @@
-import 'package:carros/api/login_api.dart';
-import 'package:carros/models/api_response.dart';
-import 'package:carros/models/user.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/pages/login/login_block.dart';
-import 'package:carros/utils/nav.dart';
-import 'package:carros/widgets/alert_dialog.dart';
 import 'package:carros/widgets/app_button.dart';
 import 'package:carros/widgets/app_textfield.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +10,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final bloc = LoginBlock();
-
-  final stream = bloc.stream;
+  final _bloc = LoginBlock();
 
   final _loginController = TextEditingController();
 
   final _passwdController = TextEditingController();
-
-  bool _showProgress = false;
 
   var _formKey = GlobalKey<FormState>();
 
@@ -31,17 +22,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    Future<User> future = User.loadUser();
-
-    future.then((User user){
-      setState(() {
-        if (user != null) {
-          print(user.toString());
-          _onAutoLogin();
-        }
-      });
-    });
-
+    _bloc.load(context, Home(), true);
     super.initState();
   }
 
@@ -70,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             AppTextField('Login', 'Digite seu login',
             controller: _loginController,
-            validator: _validateLogin,
+            validator: _bloc.validateLogin,
             textInputAction: TextInputAction.next,
             nextFocus: _focusPasswd),
             SizedBox(
@@ -79,84 +60,34 @@ class _LoginPageState extends State<LoginPage> {
             AppTextField('Senha', 'Digite sua senha',
               obscure: true,
               controller: _passwdController,
-              validator: _validatePasswd,
+              validator: _bloc.validatePasswd,
               keyboardType: TextInputType.number,
               focusNode: _focusPasswd),
             SizedBox(
               height: 24,
             ),
-            AppButton(
-              'Login',
-              _onClickLogin,
-              showProgress: _showProgress,
+            StreamBuilder<bool>(
+              stream: _bloc.stream,
+              initialData: false,
+              builder: (context, snapshot) {
+
+                return AppButton(
+                'Login',
+                ( ) => _bloc.onClickLogin(
+                  context,
+                  _formKey,
+                  _loginController,
+                  _passwdController,
+                ),
+                showProgress: snapshot.data ?? false,
+
+                );
+              },
             ),
           ],
         ),
       ),
     );
-  }
-
-  _onClickLogin() async {
-    bool formOk = _formKey.currentState.validate();
-    if (!formOk) {
-      return;
-    }
-
-    String login = _loginController.text;
-    String passwd = _passwdController.text;
-
-    _onProgress(true);
-
-    ApiResponse response = await LoginApi.login(login, passwd);
-
-    if(response.status) {
-
-      nav(context, Home(), replace: true);
-
-      _onProgress(false);
-
-      return;
-
-    }
-
-    alertDialog(context, "Erro", response.msg, ok: () => pop(context));
-
-    _onProgress(false);
-
-    return;
-
-  }
-
-  _onAutoLogin() {
-    _onProgress(true);
-
-    nav(context, Home(), replace: true);
-
-    _onProgress(false);
-
-  }
-
-  _onProgress(enable) {
-    setState(() {
-      _showProgress = enable;
-    });
-  }
-
-  String _validateLogin(String value) {
-    if (value.isEmpty) {
-      return 'Digite seu login';
-    }
-    return null;
-  }
-
-  String _validatePasswd(String value) {
-    if (value.isEmpty) {
-      return 'Digite sua senha';
-    }
-    if (value.length <= 2) {
-      return 'A senha precisa ter no mínimo 3 letras ou números';
-    }
-    return null;
   }
 
   @override
