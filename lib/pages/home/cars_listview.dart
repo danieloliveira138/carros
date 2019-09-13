@@ -1,11 +1,10 @@
-import 'dart:async';
-
 import 'package:carros/api/cars_api.dart';
 import 'package:carros/models/car.dart';
 import 'package:carros/pages/car_page.dart';
-import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/card_car.dart';
 import 'package:flutter/material.dart';
+
+import 'cars_bloc.dart';
 
 // ignore: must_be_immutable
 class CarsListView extends StatefulWidget {
@@ -32,13 +31,12 @@ class CarsListView extends StatefulWidget {
 }
 
 class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClientMixin<CarsListView>{
-
-  final _streamController = StreamController<List<Car>>();
+  CarsBloc _bloc = CarsBloc();
 
   @override
   void initState() {
 
-    _loadCars();
+    _bloc.loadCars(widget._type);
 
     super.initState();
   }
@@ -51,7 +49,7 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
     super.build(context);
 
     return StreamBuilder(
-      stream: _streamController.stream,
+      stream: _bloc.stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(
@@ -92,7 +90,7 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
           actions: <Widget>[
             FlatButton(
               child: Text('Descrição'),
-              onPressed: () => _onClickDetails(carros[index]),
+              onPressed: () => _bloc.onClickDetails(context, CarPage(carros[index]),),
             ),
             FlatButton(
               child: Text('Compartilhar'),
@@ -105,20 +103,9 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
 
   }
 
-  _onClickDetails(Car car){
-    nav(context, CarPage(car));
-  }
-
-  void _loadCars() async {
-
-    var cars = await CarsApi.getListCars(type: widget._type);
-
-    _streamController.add(cars);
-  }
-
   @override
   void dispose() {
-    _streamController.close();
+    _bloc.dispose();
     super.dispose();
   }
 

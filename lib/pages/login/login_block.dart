@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:carros/api/login_api.dart';
 import 'package:carros/models/api_response.dart';
 import 'package:carros/models/user.dart';
-import 'package:carros/pages/home_page.dart';
+import 'package:carros/pages/home/home_page.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/alert_dialog.dart';
 import 'package:flutter/material.dart';
