@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:carros/api/cars_api.dart';
 import 'package:carros/models/car.dart';
 import 'package:carros/pages/car_page.dart';
@@ -12,20 +11,31 @@ class CarsBloc {
 
   get stream => _streamController.stream;
 
-  dispose() {
-    _streamController.close();
-  }
-
   void loadCars(String type) async {
 
-    var cars = await CarsApi.getListCars(type: type);
+    try {
 
-    _streamController.add(cars);
+      List<Car> cars = await CarsApi.getListCars(type: type);
+
+      _streamController.add(cars);
+
+    } catch (error, exception) {
+
+      print('Car list error: $exception');
+
+      _streamController.addError('Erro ao acessar o servidor de dados.');
+
+    }
+
   }
 
 
   void onClickDetails(BuildContext context, CarPage page){
     nav(context, page);
+  }
+
+  dispose() {
+    _streamController.close();
   }
 
 }

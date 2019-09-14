@@ -2,6 +2,7 @@ import 'package:carros/api/cars_api.dart';
 import 'package:carros/models/car.dart';
 import 'package:carros/pages/car_page.dart';
 import 'package:carros/widgets/card_car.dart';
+import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
 
 import 'cars_bloc.dart';
@@ -52,15 +53,7 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
       stream: _bloc.stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(
-            child: Text(
-              'Erro ao Acessar o Servidor',
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.red
-              ),
-            ),
-          );
+          return TextError(snapshot.error);
         }
 
         if (!snapshot.hasData) {
