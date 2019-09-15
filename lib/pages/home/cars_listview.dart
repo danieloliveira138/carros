@@ -62,7 +62,10 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
           );
         }
 
-        return _getCardList(snapshot.data);
+        return RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: _getCardList(snapshot.data),
+        );
 
       },
     );
@@ -102,4 +105,8 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
     super.dispose();
   }
 
+
+  Future<List<Car>> _onRefresh() {
+    return _bloc.loadCars(widget._type);
+  }
 }

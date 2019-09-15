@@ -11,11 +11,13 @@ class CarsBloc {
 
   get stream => _streamController.stream;
 
-  void loadCars(String type) async {
+  Future<List<Car>> loadCars(String type) async {
+
+    List<Car> cars;
 
     try {
 
-      List<Car> cars = await CarsApi.getListCars(type: type);
+       cars = await CarsApi.getListCars(type: type);
 
       _streamController.add(cars);
 
@@ -26,6 +28,8 @@ class CarsBloc {
       _streamController.addError('Erro ao acessar o servidor de dados.');
 
     }
+
+    return cars;
 
   }
 
