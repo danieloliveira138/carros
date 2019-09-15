@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:carros/api/cars_api.dart';
 import 'package:carros/models/car.dart';
-import 'package:carros/pages/car_page.dart';
+import 'package:carros/pages/detail/car_page.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 
