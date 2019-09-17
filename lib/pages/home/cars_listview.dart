@@ -1,4 +1,5 @@
 import 'package:carros/api/cars_api.dart';
+import 'package:carros/database/car_dao.dart';
 import 'package:carros/models/car.dart';
 import 'package:carros/pages/detail/car_page.dart';
 import 'package:carros/widgets/card_car.dart';
@@ -26,6 +27,10 @@ class CarsListView extends StatefulWidget {
     _type = CarsApi.ESPORTIVOS;
   }
 
+  CarsListView.favorites() {
+    _type = CarDao.FAVORITES;
+  }
+
   @override
   _CarsListViewState createState() => _CarsListViewState();
 
@@ -48,6 +53,10 @@ class _CarsListViewState extends State<CarsListView> with AutomaticKeepAliveClie
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    if (widget._type == CarDao.FAVORITES) {
+      _bloc.loadCars(widget._type);
+    }
 
     return StreamBuilder(
       stream: _bloc.stream,

@@ -46,6 +46,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
         CarsListView.classics(),
         CarsListView.sportive(),
         CarsListView.lux(),
+        CarsListView.favorites(),
       ],
     );
   }
@@ -55,12 +56,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
       Tab(text: "Clássicos",),
       Tab(text: "Esportivos",),
       Tab(text: "Luxo"),
+      Tab(text: 'Favoritos'),
     ];
   }
 
   _initTabs() async {
 
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
 
     _tabController.index = await SharedPrefs.getPrefInt(TAB_INDEX) ?? 0;
 

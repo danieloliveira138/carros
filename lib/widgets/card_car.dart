@@ -6,9 +6,10 @@ class CardCar extends StatelessWidget {
   Car car;
   int index;
   int carsSize;
+  bool favorite;
   List<Widget> actions = [];
 
-  CardCar(this.car, this.index, this.carsSize, {this.actions});
+  CardCar(this.car, this.index, this.carsSize, {this.actions, this.favorite = false});
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +25,22 @@ class CardCar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Center(
-                  child: Image.network(
-                    car.urlFoto ?? "Image not find",
-                    width: 200,
-                  ),
+                  child: Stack(
+                    children: <Widget>[
+                      Image.network(
+                        car.urlFoto ?? "Image not find",
+                        width: 200,
+                      ),
+                      Container(
+                        child: Icon(
+                          Icons.favorite,
+                          color: favorite ? Colors.red : Colors.white,
+                        )
+
+
+                      ),
+                    ],
+                  )
                 ),
                 SizedBox(
                   height: 16,

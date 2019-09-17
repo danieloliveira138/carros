@@ -10,4 +10,5 @@ class ApiResponse<T> {
   ApiResponse.error(this.msg) {
     status = false;
   }
+
 }
