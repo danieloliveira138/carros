@@ -15,23 +15,25 @@ class CarPage extends StatefulWidget {
 class _CarPageState extends State<CarPage> {
   CarBloc _bloc = CarBloc();
 
+  get car => widget._car;
+
   @override
   void initState() {
     _bloc.loadLoremIpsum();
+    _bloc.isCarFavorite(car);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(widget._car.nome),
-      body: _body(context, widget._car),
+      appBar: _appBar(car.nome ?? ''),
+      body: _body(context, car),
     );
   }
 
   _body(BuildContext context, Car car) {
     return Container(
-      margin: EdgeInsets.all(16),
       child: ListView(
         children: <Widget>[
           _carImage(),
@@ -42,49 +44,62 @@ class _CarPageState extends State<CarPage> {
     );
   }
 
-  Row _carTitle() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Flexible(
-          fit: FlexFit.loose,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                widget._car.nome,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+  _carTitle() {
+    return Container(
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 16,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Flexible(
+            fit: FlexFit.loose,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  widget._car.nome,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Text(
-                widget._car.tipo,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              )
-            ],
+                Text(
+                  widget._car.tipo,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        Row(
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.favorite),
-              onPressed: _bloc.onClickFavorite,
-              iconSize: 44,
-              color: Colors.red,
-            ),
-            IconButton(
-              icon: Icon(Icons.share),
-              onPressed: _bloc.onClickShare,
-              iconSize: 44,
-            ),
-          ],
-        )
-      ],
+          Row(
+            children: <Widget>[
+              StreamBuilder<bool>(
+                stream: _bloc.favorite,
+                initialData: false,
+                builder: (context, snapshot) {
+                  return IconButton(
+                    icon: Icon(snapshot.data == true ? Icons.favorite : Icons.favorite_border),
+                    onPressed: () => _bloc.onClickFavorite(car),
+                    iconSize: 44,
+                    color: Colors.red,
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.share),
+                onPressed: _bloc.onClickShare,
+                iconSize: 44,
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 
@@ -93,7 +108,7 @@ class _CarPageState extends State<CarPage> {
       margin: EdgeInsets.all(24),
       width: double.infinity,
       child: Image.network(
-        widget._car.urlFoto,
+        car.urlFoto ?? ' ',
         fit: BoxFit.fitWidth,
       ),
     );
@@ -136,6 +151,10 @@ class _CarPageState extends State<CarPage> {
 
   _carDescription() {
     return Container(
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+      ),
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,7 +163,7 @@ class _CarPageState extends State<CarPage> {
             height: 24,
           ),
           Text(
-            'Descrição ${widget._car.nome}',
+            'Descrição ${car.nome}:',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           SizedBox(
