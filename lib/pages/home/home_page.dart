@@ -7,13 +7,11 @@ import 'home_bloc.dart';
 
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
-
   @override
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
-
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home> {
   TabController _tabController;
 
   HomeBloc _bloc = HomeBloc();
@@ -23,7 +21,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -35,7 +32,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
         return Scaffold(
           appBar: _appBar(snapshot.data),
           body: _body(snapshot.data),
-          drawer: MenuList(favorite: () => _bloc.favoriteScaffold(), home: () => _bloc.homeScaffold(),),
+          drawer: MenuList(
+            favorite: () => _bloc.favoriteScaffold(),
+            home: () => _bloc.homeScaffold(),
+          ),
         );
       },
     );
@@ -65,7 +65,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
   _body(int opt) {
     switch (opt) {
       case 1:
-          return CarsListView.classics();
+        return CarsListView.favorites();
         break;
 
       case -1:
@@ -79,31 +79,30 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
         );
         break;
     }
-
   }
 
   _getTabs() {
     return [
-      Tab(text: "Clássicos",),
-      Tab(text: "Esportivos",),
+      Tab(
+        text: "Clássicos",
+      ),
+      Tab(
+        text: "Esportivos",
+      ),
       Tab(text: "Luxo"),
     ];
   }
 
   _initTabs() async {
-
     _tabController = TabController(length: 3, vsync: this);
 
     _tabController.index = await SharedPrefs.getPrefInt(TAB_INDEX) ?? 0;
 
     _tabController.addListener(() {
-
       print("Tab: ${_tabController.index}");
 
       SharedPrefs.setPrefInt(TAB_INDEX, _tabController.index);
-
     });
-
   }
 
   @override
@@ -111,5 +110,4 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
     _bloc.dispose();
     super.dispose();
   }
-
 }
