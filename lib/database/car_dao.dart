@@ -76,10 +76,10 @@ class CarDao {
 
   }
 
-//  Future<bool> exists(Car car) async {
-//    Car carRecord = await findById(car.id);
-//    return carRecord != null;
-//  }
+  Future<bool> exists(Car car) async {
+    Car carRecord = await findById(car.id);
+    return carRecord != null;
+  }
 
   Future<bool> existsByUser(Car car, int userId) async {
     Car carRecord = await findByIdAndUser(car.id, userId);
