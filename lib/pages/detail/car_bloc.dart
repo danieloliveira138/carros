@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:carros/api/lorem_api.dart';
 import 'package:carros/database/car_dao.dart';
 import 'package:carros/models/car.dart';
+import 'package:carros/models/user.dart';
 
 class CarBloc{
   
@@ -57,12 +58,15 @@ class CarBloc{
   }
 
   void onClickFavorite(Car car) async {
-    var carSavedOnDB = await _carDao.exists(car);
+    User user = await User.loadUser();
+
+    var carSavedOnDB = await _carDao.existsByUser(car, user.id);
 
     if (carSavedOnDB) {
-      await _carDao.delete(car.id);
+
+      await _carDao.deleteByUser(car.id, user.id);
     } else {
-      await _carDao.save(car);
+      await _carDao.saveFavorite(car, user.id);
     }
 
     _streamFavorite.add(!carSavedOnDB);
@@ -70,7 +74,9 @@ class CarBloc{
   }
 
   isCarFavorite(Car car) async {
-    var isCarSavedOnBD = await _carDao.exists(car);
+    User user = await User.loadUser();
+
+    var isCarSavedOnBD = await _carDao.existsByUser(car, user.id);
     _streamFavorite.add(isCarSavedOnBD);
   }
 

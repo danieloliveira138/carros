@@ -1,5 +1,6 @@
 class Car {
   int id;
+  int userId;
   String nome;
   String tipo;
   String descricao;
@@ -10,6 +11,7 @@ class Car {
 
   Car(
       {this.id,
+      this.userId,
       this.nome,
       this.tipo,
       this.descricao,
@@ -20,6 +22,7 @@ class Car {
 
   Car.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    userId = json['userId'];
     nome = json['nome'];
     tipo = json['tipo'];
     descricao = json['descricao'];
@@ -32,6 +35,7 @@ class Car {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['userId'] = this.userId;
     data['nome'] = this.nome;
     data['tipo'] = this.tipo;
     data['descricao'] = this.descricao;
