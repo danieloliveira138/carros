@@ -3,6 +3,8 @@ import 'package:carros/pages/home/cars_listview.dart';
 import 'package:carros/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
 
+import 'home_bloc.dart';
+
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
 
@@ -14,40 +16,70 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
 
   TabController _tabController;
 
+  HomeBloc _bloc = HomeBloc();
+
   static const String TAB_INDEX = 'tab_index';
 
   @override
   void initState() {
     super.initState();
 
-    _initTabs();
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Carros'),
-        bottom: TabBar(
-          tabs: _getTabs(),
-          controller: _tabController,
-        ),
-      ),
-      body: _body(),
-      drawer: MenuList(),
+    return StreamBuilder<int>(
+      stream: _bloc.stream,
+      initialData: -1,
+      builder: (context, snapshot) {
+        return Scaffold(
+          appBar: _appBar(snapshot.data),
+          body: _body(snapshot.data),
+          drawer: MenuList(favorite: () => _bloc.favoriteScaffold(), home: () => _bloc.homeScaffold(),),
+        );
+      },
     );
   }
 
-  _body() {
-    return TabBarView(
-      controller: _tabController,
-      children: <Widget>[
-        CarsListView.classics(),
-        CarsListView.sportive(),
-        CarsListView.lux(),
-      ],
-    );
+  _appBar(int opt) {
+    switch (opt) {
+      case 1:
+        return AppBar(
+          title: Text('Favoritos'),
+        );
+        break;
+
+      case -1:
+        _initTabs();
+        return AppBar(
+          title: Text('Carros'),
+          bottom: TabBar(
+            tabs: _getTabs(),
+            controller: _tabController,
+          ),
+        );
+        break;
+    }
+  }
+
+  _body(int opt) {
+    switch (opt) {
+      case 1:
+          return CarsListView.classics();
+        break;
+
+      case -1:
+        return TabBarView(
+          controller: _tabController,
+          children: <Widget>[
+            CarsListView.classics(),
+            CarsListView.sportive(),
+            CarsListView.lux(),
+          ],
+        );
+        break;
+    }
+
   }
 
   _getTabs() {
@@ -72,6 +104,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin<Home>{
 
     });
 
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
   }
 
 }
