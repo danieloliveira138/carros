@@ -32,14 +32,14 @@ class DatabaseHelper {
   }
 
   FutureOr<void> _onCreate(Database db, int version) async {
-    await db.execute('CREATE TABLE car(id INTEGER PRIMARY KEY, tipo TEXT, nome TEXT, descricao TEXT, urlFoto TEXT, urlVideo TEXT, latitude TEXT, longitude TEXT)');
+    await db.execute('CREATE TABLE car(id INTEGER PRIMARY KEY, userId INTEGER, tipo TEXT, nome TEXT, descricao TEXT, urlFoto TEXT, urlVideo TEXT, latitude TEXT, longitude TEXT)');
   }
 
   Future<FutureOr<void>> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     print ('_onUpgrade: oldVersion $oldVersion > newVersion: $newVersion');
 
     if (oldVersion == 1 && newVersion == 2) {
-      await db.execute('alter table car add column NOVA TEXT');
+      await db.execute('alter table car add column userId INTEGER');
     }
   }
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:carros/api/cars_api.dart';
 import 'package:carros/database/car_dao.dart';
 import 'package:carros/models/car.dart';
+import 'package:carros/models/user.dart';
 import 'package:carros/pages/detail/car_page.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,14 @@ class CarsBloc {
     List<Car> cars;
 
     if (type == CarDao.FAVORITES) {
-      cars = await _carDao.findAll();
-      _streamController.add(cars);
+      User user = await User.loadUser();
+      cars = await _carDao.findAllByUser(user.id);
+
+      if (cars == null){
+        _streamController.addError('Nenhum Carro Salvo');
+      } else {
+        _streamController.add(cars);
+      }
 
       return cars ?? <Car> [];
     }
