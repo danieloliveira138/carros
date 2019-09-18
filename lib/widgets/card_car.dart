@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/models/car.dart';
 import 'package:flutter/material.dart';
 
@@ -24,9 +25,11 @@ class CardCar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Center(
-                  child: Image.network(
-                    car.urlFoto ?? "Image not find",
+                  child: CachedNetworkImage(
+                    imageUrl: car.urlFoto ?? "Image not find",
                     width: 200,
+                    placeholder: (context, url) => new CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => new Icon(Icons.error),
                   ),
                 ),
                 SizedBox(
