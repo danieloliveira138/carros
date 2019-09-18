@@ -6,6 +6,8 @@ class CarDao {
 
   Future<Database> get db => DatabaseHelper.getInstance().db;
 
+  static const FAVORITES = 'Favoritos';
+
   Future<int> save(Car car) async {
     var dbClient = await db;
     var id = await dbClient.insert('car', car.toJson(),
@@ -19,7 +21,7 @@ class CarDao {
 
     final list = await dbClient.rawQuery('SELECT * FROM car');
 
-    return getCarList(list);
+    return _getCarList(list);
   }
 
   Future<List<Car>> findAllByType(String tipo) async {
@@ -27,7 +29,7 @@ class CarDao {
 
     final list = await dbClient.rawQuery('SELECT * FROM car WHERE tipo =? ', [tipo]);
 
-    return getCarList(list);
+    return _getCarList(list);
   }
 
   Future<Car> findById(int id) async {
@@ -68,7 +70,7 @@ class CarDao {
     return await dbClient.rawDelete('DELETE FROM car');
   }
 
-  List<Car> getCarList(List<Map<String, dynamic>> list) {
+  List<Car> _getCarList(List<Map<String, dynamic>> list) {
     return list.map<Car>((json) => Car.fromJson(json)).toList();
   }
 }

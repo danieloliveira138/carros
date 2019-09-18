@@ -4,6 +4,11 @@ import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 
 class MenuList extends StatelessWidget {
+  Function favorite;
+  Function home;
+
+  MenuList({this.favorite, this.home});
+
   @override
   Widget build(BuildContext context) {
 
@@ -21,18 +26,24 @@ class MenuList extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.star),
+              leading: Icon(Icons.favorite),
               title: Text('Favoritos'),
               subtitle: Text('Tela de lista de favoritos'),
               trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                Navigator.pop(context);
+                favorite();
+              },
             ),
             ListTile(
-              leading: Icon(Icons.picture_in_picture),
-              title: Text('Fotos do mês'),
-              subtitle: Text('Veja as melhores fotos do mês'),
+              leading: Icon(Icons.list),
+              title: Text('Carros'),
+              subtitle: Text('Lista de carros'),
               trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                Navigator.pop(context);
+                home();
+              },
             ),
             ListTile(
               leading: Icon(Icons.settings),
