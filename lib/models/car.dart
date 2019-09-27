@@ -1,6 +1,7 @@
-class Car {
+import 'package:carros/models/entity.dart';
+
+class Car extends Entity{
   int id;
-  int userId;
   String nome;
   String tipo;
   String descricao;
@@ -9,20 +10,11 @@ class Car {
   String latitude;
   String longitude;
 
-  Car(
-      {this.id,
-      this.userId,
-      this.nome,
-      this.tipo,
-      this.descricao,
-      this.urlFoto,
-      this.urlVideo,
-      this.latitude,
-      this.longitude});
+  Car({this.id, this.nome, this.tipo, this.descricao, this.urlFoto,
+      this.urlVideo, this.latitude, this.longitude});
 
   Car.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    userId = json['userId'];
     nome = json['nome'];
     tipo = json['tipo'];
     descricao = json['descricao'];
@@ -32,10 +24,10 @@ class Car {
     longitude = json['longitude'];
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['userId'] = this.userId;
     data['nome'] = this.nome;
     data['tipo'] = this.tipo;
     data['descricao'] = this.descricao;
@@ -48,6 +40,8 @@ class Car {
 
   @override
   String toString() {
-    return 'Car{id: $id, nome: $nome, tipo: $tipo, descricao: $descricao, urlFoto: $urlFoto, urlVideo: $urlVideo, latitude: $latitude, longitude: $longitude}';
+    return 'Car{id: $id, nome: $nome, tipo: $tipo, descricao: $descricao,'
+        ' urlFoto: $urlFoto, urlVideo: $urlVideo, latitude: $latitude,'
+        ' longitude: $longitude}';
   }
 }

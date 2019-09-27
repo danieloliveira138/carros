@@ -1,8 +1,9 @@
 import 'dart:async';
-
 import 'package:carros/api/lorem_api.dart';
 import 'package:carros/database/car_dao.dart';
+import 'package:carros/database/favorite_dao.dart';
 import 'package:carros/models/car.dart';
+import 'package:carros/models/favorite.dart';
 import 'package:carros/models/user.dart';
 
 class CarBloc{
@@ -12,6 +13,7 @@ class CarBloc{
   static const String SHARE = 'share';
 
   CarDao _carDao = CarDao();
+  FavoriteDao _favoriteDao = FavoriteDao();
 
   StreamController _streamController = StreamController<String>();
 
@@ -59,25 +61,30 @@ class CarBloc{
 
   void onClickFavorite(Car car) async {
     User user = await User.loadUser();
+    Favorite favorite = Favorite(id: car.id, userId: user.id);
 
-    var carSavedOnDB = await _carDao.existsByUser(car, user.id);
+    final isFavorite = await _favoriteDao.isFavorite(favorite);
 
-    if (carSavedOnDB) {
+    if (isFavorite) {
 
-      await _carDao.deleteByUser(car.id, user.id);
+      await _favoriteDao.unFavorite(favorite);
+      print('Set unfavorite');
     } else {
-      await _carDao.saveFavorite(car, user.id);
+      print('Set unfavorite');
+      await _favoriteDao.save(favorite);
     }
 
-    _streamFavorite.add(!carSavedOnDB);
+    _streamFavorite.add(!isFavorite);
 
   }
 
   isCarFavorite(Car car) async {
     User user = await User.loadUser();
+    Favorite favorite = Favorite(id: car.id, userId: user.id);
 
-    var isCarSavedOnBD = await _carDao.existsByUser(car, user.id);
-    _streamFavorite.add(isCarSavedOnBD);
+    var isFavorite = await _favoriteDao.isFavorite(favorite);
+    print('isCarFavorite -> $isFavorite');
+    _streamFavorite.add(isFavorite);
   }
 
   void onClickShare() {

@@ -1,4 +1,5 @@
 import 'package:carros/models/car.dart';
+import 'package:carros/widgets/drawer_menu.dart';
 import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
 import 'car_bloc.dart';
@@ -29,6 +30,7 @@ class _CarPageState extends State<CarPage> {
     return Scaffold(
       appBar: _appBar(car.nome ?? ''),
       body: _body(context, car),
+      drawer: MenuList(),
     );
   }
 
